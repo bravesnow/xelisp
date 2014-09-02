@@ -1,12 +1,12 @@
 ;第三方插件配置代码
 ;===============================================
 ;ColorTheme主题颜色
-;(require 'molokai-theme)
+(require 'molokai-theme)
 ;(setq molokai-theme-kit t);Just It doesn't work for Emacs24.3
 
-(require 'color-theme);另一种主题集合
-(color-theme-initialize);使用前初始化
-(color-theme-calm-forest);16行的主题
+;(require 'color-theme);另一种主题集合
+;(color-theme-initialize);使用前初始化
+;(color-theme-calm-forest);16行的主题
 ;(color-theme-subtle-hacker)
 ;===============================================
 ;Tabbar多标签

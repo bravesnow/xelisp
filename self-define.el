@@ -50,27 +50,30 @@
 (defun smart-compile (filename)
   ;;编译
   (interactive)
-  (setq split-width-threshold 0);垂直分割窗口
+  ;;(setq split-width-threshold 0);垂直分割窗口
   (if (eq major-mode 'c-mode)
       (setq command
-	    (concat "gcc -o "
+	    (concat "gcc -Wall -o "
 		    (file-name-sans-extension filename)
-		    " " filename " -g ")))
+		    " " filename " -g -std=c99")))
   (if (eq major-mode 'c++-mode)
-      (setq command
-	    (concat "g++ -o "
+      (setq command 
+	    (concat "g++ -Wall -o "
 		    (file-name-sans-extension filename)
 		    " " filename " -g ")))
+  (if (eq major-mode 'latex-mode)
+      (setq command
+	    (concat "xelatex " filename)))
   (if (not (null command))
 	(compile command))
-  (switch-to-buffer-other-window "*compilation*")
-  (setq split-width-threshold 160)
+  ;(switch-to-buffer-other-window "*compilation*")
+  ;;(setq split-width-threshold 160);还原水平分割
   )
 ;;自适应运行(.exe与.py)
 (defun smart-execution (filename)
   ;;执行
   (interactive)
-  (setq split-width-threshold 0);垂直分割窗口
+  ;;(setq split-width-threshold 0);垂直分割窗口
   (if (eq major-mode 'python-mode)
             (setq runcmd
 		  (concat "python.exe "
@@ -80,7 +83,9 @@
 		  ".exe")))
   (shell-command runcmd)
   (switch-to-buffer-other-window "*Shell Command Output*")
-  (setq split-width-threshold 160));置还原
+  (message "Finished!")
+  ;;(setq split-width-threshold 160);置还原
+  )
 ;===============================================
 ;;集成编译与执行
 (defun mycompile ()

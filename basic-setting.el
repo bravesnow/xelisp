@@ -5,8 +5,8 @@
 (server-start);启动服务端Emacs
 ;client时需要设置EMACS_SERVER_FILE为server的地址
 ;==============================================
-;(set-default-font "Courier New-12");设置默认字体
-(set-default-font "-outline-Courier New-bold-normal-normal-mono-16-*-*-*-c-*-iso8859-1");;设置默认字体字号
+(set-default-font "Courier New-12");设置默认字体
+;(set-default-font "-outline-Courier New-normal-normal-normal-mono-16-*-*-*-c-*-iso8859-1");;设置默认字体字号New-bold加粗
 
 ;(set-fontset-font "fontset-default"
 ; 'gb18030 '("Microsoft YaHei"."unicode-bmp"));设置中文字体微软雅黑
@@ -31,7 +31,11 @@
 (recentf-mode 1);开启最近访问文件
 (add-hook 'org-mode-hook ;org-mode模式下，自动换行
 	  (lambda () (setq truncate-lines nil)))
-;===============================================
+;;===============================================
+;(require 'electric);括号自动补全
+(electric-indent-mode t);;编辑时智能缩进，类似于C-j的效
+(electric-pair-mode t);;系统本身内置的智能自动补全括号
+;;=================================================
 ;; 鼠标滚轮，把默认滚动改为3行 
 (defun up-slightly () (interactive) (scroll-up 3)) 
 (defun down-slightly () (interactive) (scroll-down 3)) 
