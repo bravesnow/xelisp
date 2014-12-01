@@ -9,94 +9,94 @@
 	'server-kill-buffer-query-function)
 ;==============================================
 ;Tab一键格式化函数
-(defun indent-buffer ()
+(defun x-indent-buffer ()
   "Indent the whole buffer."
   (interactive)
   (save-excursion
     (indent-region (point-min) (point-max) nil)))
-
 ;======================================
 ;选择当前行
-(defun select-current-line ()
+(defun x-select-current-line ()
   "select current line"
   (interactive)
   (beginning-of-line)
   (push-mark)
   (end-of-line))
 ;删除当前行
-(defun delete-current-line ()
+(defun x-delete-current-line ()
   "delete current line"
   (interactive)
   (beginning-of-line)
   (push-mark)
   (end-of-line)
   (kill-region (point) (mark)))
-;=================================
-;;判断字符串是否存在给定缓冲区
-(defun mysearch-buf-str (str bufstr)
-  "search a given string in a given buffer"
-  (with-current-buffer (get-buffer bufstr)
-    (string-match str (buffer-string))))
 ;==================================================
 ;;快捷键绑定
-(global-set-key (kbd "<f4>") 'mycompile);编译快捷
-(global-set-key (kbd "<f5>") 'myrun);运行快捷
-
+(global-set-key (kbd "<f4>") 'x-compile);编译快捷
+(global-set-key (kbd "<f5>") 'x-run);运行快捷
 ;======================================
 ;;当前缓冲区文件名
-(defun getfilename()
+(defun x-get-file-name()
   (file-name-nondirectory buffer-file-name))
-;;自适应编译(c与c++)
+
+;;========自适应编译(c与c++)
 (defun smart-compile (filename)
-  ;;编译
   (interactive)
-  ;;(setq split-width-threshold 0);垂直分割窗口
   (if (eq major-mode 'c-mode)
       (setq command
-	    (concat "gcc -Wall -o "
-		    (file-name-sans-extension filename)
-		    " " filename " -g -std=c99")))
+        (concat "gcc -Wall -g -std=c99 "
+          filename " -o " (file-name-sans-extension filename))))
+
   (if (eq major-mode 'c++-mode)
       (setq command 
-	    (concat "g++ -Wall -o "
-		    (file-name-sans-extension filename)
-		    " " filename " -g ")))
-  (if (eq major-mode 'latex-mode)
-      (setq command
-	    (concat "xelatex " filename)))
+        (concat "g++ -Wall -g -std=c++11 "
+          filename " -o " (file-name-sans-extension filename))))
+
   (if (not (null command))
-	(compile command))
-  ;(switch-to-buffer-other-window "*compilation*")
-  ;;(setq split-width-threshold 160);还原水平分割
-  )
-;;自适应运行(.exe与.py)
+    (compile command)
+    (message "This file type cannot be compiled!"))
+)
+;;========自适应运行可执行文件
 (defun smart-execution (filename)
-  ;;执行
   (interactive)
-  ;;(setq split-width-threshold 0);垂直分割窗口
   (if (eq major-mode 'python-mode)
-            (setq runcmd
-		  (concat "python.exe "
-			  (buffer-file-name)))
     (setq runcmd
-	  (concat (file-name-sans-extension filename)
-		  ".exe")))
+      (concat "python "
+			  (buffer-file-name)))
+    (setq runcmd (concat 
+			(file-name-sans-extension filename) ".exe")))
+
   (shell-command runcmd)
   (switch-to-buffer-other-window "*Shell Command Output*")
   (message "Finished!")
-  ;;(setq split-width-threshold 160);置还原
   )
+;;========调试编译
+(defun debug-compile (filename)
+  (interactive)
+  (if (eq major-mode 'c-mode)
+	    (concat "gcc -Wall -g -DDebug -std=c99 "
+		    filename " -o " (file-name-sans-extension filename)))
+
+  (if (eq major-mode 'c++-mode)
+      (setq command 
+	    (concat "g++ -Wall -g -DDebug -std=c++11 "
+		    filename " -o " (file-name-sans-extension filename))))
+
+  (if (not (null command))
+	(compile command)))
 ;===============================================
 ;;集成编译与执行
-(defun mycompile ()
+(defun x-debug ()
   (interactive)
-  (smart-compile (getfilename)))
-(defun myrun ()
+  (debug-compile (x-get-file-name)))
+
+(defun x-compile ()
   (interactive)
-  (smart-execution (getfilename)))
+  (smart-compile (x-get-file-name)))
+
+(defun x-run ()
+  (interactive)
+  (smart-execution (x-get-file-name)))
+
 ;================================
 (provide 'self-define)
-
-
-
-

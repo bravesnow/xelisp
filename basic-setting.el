@@ -7,11 +7,8 @@
 ;==============================================
 (set-default-font "Courier New-12");设置默认字体
 ;(set-default-font "-outline-Courier New-normal-normal-normal-mono-16-*-*-*-c-*-iso8859-1");;设置默认字体字号New-bold加粗
-
-;(set-fontset-font "fontset-default"
-; 'gb18030 '("Microsoft YaHei"."unicode-bmp"));设置中文字体微软雅黑
-(set-fontset-font "fontset-default"
- 'gb18030 '("SimSun"."unicode-bmp"));设置中文字体宋体
+(set-fontset-font "fontset-default" 'gb18030 '("Microsoft YaHei"."unicode-bmp"));设置中文字体微软雅黑
+(set-fontset-font "fontset-default" 'gb18030 '("SimSun"."unicode-bmp"));设置中文字体宋体
 ;==============================================
 (setq inhibit-startup-message t);;关闭启动画面
 (setq-default initial-scratch-message "");;scratch buffer置空
@@ -29,11 +26,11 @@
 ;(fset 'yes-or-no-p 'y-or-n-p);;以 y/n代表 yes/no
 (setq recentf-max-saved-items 10);recentf最近访问文件最多10个
 (recentf-mode 1);开启最近访问文件
+(require 'saveplace) ;保存退出时的位置
+(setq-default save-place t)
 (add-hook 'org-mode-hook ;org-mode模式下，自动换行
 	  (lambda () (setq truncate-lines nil)))
 ;;===============================================
-;(require 'electric);括号自动补全
-(electric-indent-mode t);;编辑时智能缩进，类似于C-j的效
 (electric-pair-mode t);;系统本身内置的智能自动补全括号
 ;;=================================================
 ;; 鼠标滚轮，把默认滚动改为3行 
@@ -41,8 +38,8 @@
 (defun down-slightly () (interactive) (scroll-down 3)) 
 (global-set-key [mouse-4] 'down-slightly) 
 (global-set-key [mouse-5] 'up-slightly)
-
-;==============================================
+;================================================
+(global-set-key (kbd "RET") 'newline-and-indent);换行缩进
 ;C/C++缩进风格K&R
 (add-hook 'c-mode-hook
           '(lambda ()
@@ -50,13 +47,5 @@
 (add-hook 'c++-mode-hook
           '(lambda ()
              (c-set-style "stroustrup")))
-(global-set-key (kbd "RET") 'newline-and-indent);换行缩进
 (setq c-basic-offset 4);设置缩进字符数
 ;===============================================
-
-
-
-
-
-  
-
